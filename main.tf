@@ -37,9 +37,7 @@ resource "aws_ssm_parameter" "secret" {
 }
 
 resource "terraform_data" "set_password" {
-  triggers_replace = [
-    local.parameter_key,
-  ]
+  triggers_replace = []
 
   provisioner "local-exec" {
     when    = destroy
