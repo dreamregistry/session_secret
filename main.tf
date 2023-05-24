@@ -19,10 +19,6 @@ provider "aws" {}
 
 resource "random_pet" "namespace" {}
 
-locals {
-  parameter_key = "/session_secret/${random_pet.namespace.id}"
-}
-
 resource "random_password" "secret" {
   length           = 32
   special          = true
@@ -53,7 +49,7 @@ data "aws_region" "current" {}
 output "SESSION_SECRET" {
   value = {
     type   = "ssm"
-    key    = local.parameter_key
+    key    = aws_ssm_parameter.secret.name
     region = data.aws_region.current.name
     arn    = aws_ssm_parameter.secret.arn
   }
