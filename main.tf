@@ -1,5 +1,5 @@
 terraform {
-  backend "s3" {}
+#  backend "s3" {}
 
   required_providers {
     random = {
@@ -31,18 +31,6 @@ resource "aws_ssm_parameter" "secret" {
   type        = "SecureString"
   value       = random_password.secret.result
 }
-
-resource "terraform_data" "set_password" {
-  triggers_replace = []
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = templatefile("${path.module}/delete_secret_parameter.tpl", {
-      parameterKey = self.triggers_replace[0],
-    })
-  }
-}
-
 
 data "aws_region" "current" {}
 
